@@ -3,151 +3,153 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Atom, Eye, EyeOff, Loader2 } from "lucide-react"
-import Link from "next/link"
+import Image from "next/image"
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
-
-    try {
-      // TODO: Implement Firebase authentication
-      // For now, simulate login process
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Temporary admin check (replace with Firebase auth)
-      if (email === "admin@quantumclub.edu" && password === "quantum2024") {
-        // Redirect to admin dashboard
-        window.location.href = "/admin"
-      } else {
-        setError("Invalid email or password. Please try again.")
-      }
-    } catch (err) {
-      setError("Login failed. Please try again.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+export default function AdminLoginPage() {
+  const [view, setView] = useState<"signin" | "signup">("signin")
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-slate-950"></div>
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 relative">
+      {/* Background image */}
+      <Image
+        src="/admin-bg.jpg"
+        alt="Admin Login Background"
+        layout="fill"
+        objectFit="cover"
+        className="absolute inset-0 z-0 opacity-40"
+        priority
+      />
 
-      <div className="relative w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-4">
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-              <Atom className="h-6 w-6 text-white" />
-            </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Quantum Club
-            </span>
-          </Link>
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
-          <p className="text-gray-400">Access the admin dashboard</p>
-        </div>
-
-        {/* Login Form */}
-        <Card className="bg-slate-800/50 border-purple-500/20 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-white text-center">Sign In</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              {error && (
-                <Alert className="border-red-500/50 bg-red-500/10">
-                  <AlertDescription className="text-red-300">{error}</AlertDescription>
-                </Alert>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@quantumclub.edu"
-                  required
-                  className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-gray-300">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    required
-                    className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400 focus:border-purple-500 pr-10"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-white"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </Button>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white"
+      <div className="relative z-10 w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl flex overflow-hidden">
+        {/* Left Side */}
+        <div
+          className={`w-1/2 p-10 flex flex-col justify-center items-center transition-all duration-500 ${
+            view === "signin"
+              ? "bg-gradient-to-br from-blue-500 to-purple-500"
+              : "bg-white"
+          }`}
+        >
+          {view === "signin" ? (
+            <>
+              <h2 className="text-2xl font-bold text-white mb-4">
+                Welcome Back!
+              </h2>
+              <p className="text-white mb-6 text-center text-sm">
+                Enter your personal details to use all of site features
+              </p>
+              <button
+                className="px-6 py-2 rounded border border-white text-white hover:bg-white hover:text-blue-600 transition font-semibold"
+                onClick={() => setView("signup")}
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing In...
-                  </>
-                ) : (
-                  "Sign In"
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                Back to Homepage
-              </Link>
-            </div>
-
-            {/* Demo Credentials */}
-            <div className="mt-4 p-3 bg-slate-700/50 rounded-lg">
-              <p className="text-xs text-gray-400 mb-2">Demo Credentials:</p>
-              <p className="text-xs text-gray-300">Email: admin@quantumclub.edu</p>
-              <p className="text-xs text-gray-300">Password: quantum2024</p>
-            </div>
-          </CardContent>
-        </Card>
+                Go to Sign Up
+              </button>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold text-blue-600 mb-4">
+                Hello, Friend!
+              </h2>
+              <p className="text-blue-600 mb-6 text-center text-sm">
+                To keep connected with us please login with your personal info
+              </p>
+              <button
+                className="px-6 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition font-semibold"
+                onClick={() => setView("signin")}
+              >
+                Go to Sign In
+              </button>
+            </>
+          )}
+        </div>
+        {/* Right Side */}
+        <div className="w-1/2 p-10 flex flex-col justify-center">
+          {view === "signup" ? (
+            <>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Create Account
+              </h2>
+              <div className="flex space-x-3 mb-4">
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-google"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-facebook-f"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-github"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-linkedin-in"></i>
+                </button>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">
+                or use your email for registration
+              </p>
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-blue-400 text-white font-bold py-2 rounded hover:bg-blue-500 transition"
+                >
+                  SIGN UP
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign In</h2>
+              <div className="flex space-x-3 mb-4">
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-google"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-facebook-f"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-github"></i>
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full text-gray-600 hover:bg-blue-100">
+                  <i className="fab fa-linkedin-in"></i>
+                </button>
+              </div>
+              <p className="text-gray-400 text-sm mb-4">
+                or use your email to sign in
+              </p>
+              <form className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-blue-400 text-white font-bold py-2 rounded hover:bg-blue-500 transition"
+                >
+                  SIGN IN
+                </button>
+              </form>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
